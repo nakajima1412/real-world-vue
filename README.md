@@ -45,3 +45,9 @@ npm run build
 ```
 npm run lint
 ```
+
+## setup json-server
+
+```
+json-server --watch db.json --host 0.0.0.0
+```
