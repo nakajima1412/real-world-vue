@@ -51,3 +51,9 @@ npm run lint
 ```
 json-server --watch db.json --host 0.0.0.0
 ```
+
+delay response (ex. 1500ms)
+
+```
+json-server -d 1500 db.json --host 0.0.0.0
+```
