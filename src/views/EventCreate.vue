@@ -2,7 +2,16 @@
   <div>
     <h1>Create an Event</h1>
     <form @submit.prevent="createEvent">
-      <BaseSelect label="Select a category" :options="categories" v-model="event.category" class="field"/>
+      <BaseSelect
+        label="Select a category"
+        :options="categories"
+        v-model="event.category"
+        @blur="$v.event.category.$touch()"
+        :class="{ error: $v.event.category.$error }"
+        class="field"/>
+      <template v-if="$v.event.category.$error">
+        <p v-if="!$v.event.category.required" class="errorMessage">Category is required.</p>
+      </template>
 
       <h3>Name & describe your event</h3>
       <BaseInput label="Title" v-model="event.title" type="text" placeholder="Title" class="field"/>
@@ -19,9 +28,17 @@
         <datepicker v-model="event.date" placeholder="Select a date"/>
       </div>
 
-      <BaseSelect label="Select a time" :options="times" v-model="event.time" class="field"/>
+      <BaseSelect
+        label="Select a time"
+        :options="times"
+        v-model="event.time"
+        @blur="$v.event.time.$touch()"
+        :class="{ error: $v.event.time.$error }"
+        class="field"/>
+      <template v-if="$v.event.time.$error">
+        <p v-if="!$v.event.time.required" class="errorMessage">Time is required.</p>
+      </template>
 
-      <!-- <input type="submit" class="button -fill-gradient" value="Submit"/> -->
       <BaseButton type="submit" buttonClass="-fill-gradient">Submit</BaseButton>
     </form>
   </div>
@@ -31,6 +48,7 @@
 <script>
 import Datepicker from 'vuejs-datepicker'
 import NProgress from 'nprogress'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   components: {
@@ -45,6 +63,16 @@ export default {
       times,
       categories: this.$store.state.categories,
       event: this.createFreshEventObject()
+    }
+  },
+  validations: {
+    event: {
+      category: { required },
+      title: { required },
+      description: { required },
+      location: { required },
+      date: { required },
+      time: { required }
     }
   },
   methods: {
